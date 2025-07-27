@@ -14,6 +14,8 @@ import dev.anil.bookmyshow.Repositories.ShowRepository;
 import dev.anil.bookmyshow.Repositories.Show_SeatRepository;
 import dev.anil.bookmyshow.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class BookingService {
         this.paymentService = paymentService;
     }
 
+    @Transactional(isolation= Isolation.SERIALIZABLE)
     public Booking book(long userId, long showId, List<Long> showSeatIds)
     {
         User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User Not Found"));
