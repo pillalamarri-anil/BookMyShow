@@ -5,6 +5,7 @@ import dev.anil.bookmyshow.Models.enums.SeatStatus;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +20,8 @@ public interface Show_SeatRepository extends JpaRepository<Show_Seat, Long> {
 
     Show_Seat save(Show_Seat show_seat);
 
-    @Query("update Show_Seat ss set ss.status = :status where ss IN :showSeats ")
+    @Modifying
+    @Query("update Show_Seat ss set ss.status = :status where ss IN :showSeats")
     List<Show_Seat> updateShowSeats( List<Show_Seat> showSeats, SeatStatus status);
 
     Show_Seat findById(long id);

@@ -40,7 +40,7 @@ public class BookingService {
         this.paymentService = paymentService;
     }
 
-    @Transactional(isolation= Isolation.SERIALIZABLE)
+    @Transactional(isolation= Isolation.SERIALIZABLE, rollbackFor = Exception.class)
     public Booking book(long userId, long showId, List<Long> showSeatIds)
     {
         User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User Not Found"));
