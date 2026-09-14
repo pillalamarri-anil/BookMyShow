@@ -1,5 +1,6 @@
 package dev.anil.bookmyshow.Services;
 
+import dev.anil.bookmyshow.Exceptions.BookingNotFoundException;
 import dev.anil.bookmyshow.Exceptions.PaymentNotCompletedException;
 import dev.anil.bookmyshow.Exceptions.SeatNotAvailableException;
 import dev.anil.bookmyshow.Models.Booking;
@@ -65,6 +66,17 @@ public class BookingService {
 
         booking.setStatus(BookingStatus.CONFIRMED);
         return booking;
+    }
+
+    @Transactional(isolation= Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public Booking cancel(long bookingId, long userId)
+    {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new BookingNotFoundException("Booking Not Found"));
+
+        show_SeatRepository.updateShowSeats(booking.getSeat(), SeatStatus.AVAILABLE);
+        booking.setStatus(BookingStatus.CANCELLED);
+        return bookingRepository.save(booking);
     }
 
 }
