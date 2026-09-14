@@ -1,0 +1,10 @@
+# Review invariants for BookMyShow -- passed through to the model verbatim
+- Controllers must not call repositories directly; go through a service
+- Monetary values use BigDecimal, never double or float
+- REST endpoints must be exposed via @RestController (or @ResponseBody), not a plain @Controller
+- Spring Data repository interfaces are annotated with @Repository
+- Entities must not expose a public setter for their primary key
+- Bulk/@Modifying repository updates must run inside an existing @Transactional boundary, not open their own
+- Custom repository finders return Optional<T> or a collection, never a bare null-returning single result
+- New JPA entities extend BaseModel instead of redeclaring id/createdAt/modifiedAt
+- A service method that constructs or mutates an entity intended for persistence must actually call the repository's save/update before returning
