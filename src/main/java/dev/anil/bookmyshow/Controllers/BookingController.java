@@ -4,6 +4,8 @@ import dev.anil.bookmyshow.Models.Booking;
 import dev.anil.bookmyshow.Services.BookingService;
 import dev.anil.bookmyshow.dtos.BookingRequestDto;
 import dev.anil.bookmyshow.dtos.BookingResponseDto;
+import dev.anil.bookmyshow.dtos.CancelBookingRequestDto;
+import dev.anil.bookmyshow.dtos.CancelBookingResponseDto;
 import dev.anil.bookmyshow.dtos.ResponseStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,5 +34,20 @@ public class BookingController {
         }
         return bookingResponseDto;
 
+    }
+
+    @PostMapping("/cancel")
+    public CancelBookingResponseDto cancel(@RequestBody CancelBookingRequestDto cancelBookingRequestDto) {
+        CancelBookingResponseDto cancelBookingResponseDto = new CancelBookingResponseDto();
+        try {
+            Booking booking = bookingService.cancel(cancelBookingRequestDto.getBookingId(),
+                    cancelBookingRequestDto.getUserId());
+            cancelBookingResponseDto.setBooking(booking);
+            cancelBookingResponseDto.setStatus(ResponseStatus.SUCCESS);
+        }
+        catch (Exception e) {
+            cancelBookingResponseDto.setStatus(ResponseStatus.FAILURE);
+        }
+        return cancelBookingResponseDto;
     }
 }
